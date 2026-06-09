@@ -1,0 +1,14 @@
+# Credenciales locales de Garmin — NUNCA subir a GitHub
+garmin_login.txt
+*.env
+.env
+
+# Plan exportado desde la app
+plan_garmin.json
+
+# Workouts sueltos descargados
+S*_*.json
+
+# Python
+__pycache__/
+*.pyc

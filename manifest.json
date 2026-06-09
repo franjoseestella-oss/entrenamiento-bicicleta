@@ -1,0 +1,15 @@
+{
+  "name": "Entrenamiento Bici · Plan FTP",
+  "short_name": "Bici FTP",
+  "description": "Planificador de entrenamiento de ciclismo para subir el FTP. Exporta workouts a Garmin Connect.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0d1014",
+  "background_color": "#0d1014",
+  "lang": "es",
+  "categories": ["sports", "health", "fitness"],
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

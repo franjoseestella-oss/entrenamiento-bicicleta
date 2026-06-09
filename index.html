@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#0d1014" />
+  <meta name="description" content="Planificador de entrenamiento de ciclismo para subir el FTP, con tus datos de Strava. Exporta los workouts a Garmin Connect." />
+  <title>Entrenamiento Bici · Plan FTP</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <link rel="stylesheet" href="css/styles.css?v=3" />
+</head>
+<body>
+<div id="app">
+
+  <header class="app-header">
+    <div class="header-logo">
+      <div class="logo-icon">🚴</div>
+      <div>
+        <h1>Entrenamiento Bici</h1>
+        <span class="subtitle">Plan para subir tu FTP</span>
+      </div>
+    </div>
+  </header>
+
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- ════════ VIEW: CONFIGURAR ════════ -->
+  <section class="view active" id="view-config">
+
+    <div class="strava-card">
+      <div class="strava-row">
+        <span class="strava-badge">STRAVA</span>
+        <span>Frantxesko · Estella</span>
+      </div>
+      <p class="muted">Datos detectados de tu perfil. Ajusta el FTP si tienes un valor más reciente.</p>
+    </div>
+
+    <div class="section">
+      <h2>Tu FTP</h2>
+      <div class="row">
+        <label class="field">
+          <span>FTP actual (W)</span>
+          <input type="number" id="ftp" min="80" max="500" step="1" value="200" inputmode="numeric" />
+        </label>
+        <label class="field">
+          <span>FTP objetivo (W)</span>
+          <input type="number" id="targetFtp" min="80" max="500" step="1" value="220" inputmode="numeric" />
+        </label>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Días que entrenas y tiempo</h2>
+      <p class="muted">Marca los días y elige cuántos minutos tienes cada uno.</p>
+      <div id="days-grid" class="days-grid"><!-- JS --></div>
+    </div>
+
+    <div class="section">
+      <h2>Plan</h2>
+      <div class="row">
+        <label class="field">
+          <span>Duración (semanas)</span>
+          <select id="weeks">
+            <option value="4">4</option>
+            <option value="6">6</option>
+            <option value="8" selected>8</option>
+            <option value="12">12</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Fecha de inicio</span>
+          <input type="date" id="startDate" />
+        </label>
+      </div>
+    </div>
+
+    <button class="btn-primary big" id="btn-generate">⚡ Generar plan</button>
+
+    <div class="section">
+      <h2>Tus zonas de potencia</h2>
+      <div id="zones-table" class="zones-table"><!-- JS --></div>
+    </div>
+  </section>
+
+  <!-- ════════ VIEW: PLAN ════════ -->
+  <section class="view" id="view-plan">
+    <div class="plan-header">
+      <div>
+        <h2 id="plan-title">Tu plan</h2>
+        <p class="muted" id="plan-sub"></p>
+      </div>
+    </div>
+
+    <div class="plan-actions">
+      <button class="btn-primary" id="btn-download-plan">📦 Plan completo para Garmin (1 archivo)</button>
+      <button class="btn-secondary" id="btn-download-all">⬇️ Workouts sueltos (.json)</button>
+      <button class="btn-secondary" id="btn-download-schedule">🗓️ Calendario (.csv)</button>
+    </div>
+
+    <div id="plan-weeks"><!-- JS --></div>
+  </section>
+
+  <!-- ════════ BOTTOM NAV ════════ -->
+  <nav class="bottom-nav">
+    <div class="nav-item active" data-view="config" id="nav-config" role="button" tabindex="0">
+      <span class="nav-icon">⚙️</span><span class="nav-label">Configurar</span>
+    </div>
+    <div class="nav-item" data-view="plan" id="nav-plan" role="button" tabindex="0">
+      <span class="nav-icon">📅</span><span class="nav-label">Mi plan</span>
+    </div>
+  </nav>
+
+  <!-- ════════ MODAL detalle workout ════════ -->
+  <div id="modal-overlay" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal" id="modal-content"></div>
+  </div>
+
+</div>
+
+<script src="js/planner.js?v=3"></script>
+<script src="js/garmin.js?v=3"></script>
+<script src="js/app.js?v=3"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+</script>
+</body>
+</html>
