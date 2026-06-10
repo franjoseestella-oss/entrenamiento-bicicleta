@@ -4,6 +4,3 @@ version = "0.1.0"
 dependencies = [
     "garminconnect>=0.2.22"
 ]
-
-[tool.vercel]
-entrypoint = "api.upload_garmin:handler"
