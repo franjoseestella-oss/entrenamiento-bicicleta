@@ -10,6 +10,9 @@ class handler(BaseHTTPRequestHandler):
         self._cors()
         self.end_headers()
 
+    def do_GET(self):
+        return self._json(405, {'error': 'Método no permitido. Utiliza POST.'})
+
     def do_POST(self):
         try:
             length = int(self.headers.get('Content-Length', 0))
