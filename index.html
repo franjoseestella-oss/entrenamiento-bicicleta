@@ -13,7 +13,27 @@
   <link rel="stylesheet" href="css/styles.css?v=4" />
 </head>
 <body>
-<div id="app">
+<div id="login-screen" class="login-screen">
+  <div class="login-card">
+    <div class="login-logo">🚴</div>
+    <h2>Entrenamiento Bici</h2>
+    <p class="muted">Introduce tus credenciales para acceder</p>
+    <div id="login-error" class="login-error-message" style="display: none">Usuario o contraseña incorrectos</div>
+    <form id="login-form">
+      <div class="field" style="margin-top: 18px">
+        <span>Usuario</span>
+        <input type="text" id="login-username" required autocomplete="username" />
+      </div>
+      <div class="field" style="margin-top: 12px">
+        <span>Contraseña</span>
+        <input type="password" id="login-password" required autocomplete="current-password" />
+      </div>
+      <button type="submit" class="btn-primary big" style="margin-top: 24px">Entrar</button>
+    </form>
+  </div>
+</div>
+
+<div id="app" style="display: none">
 
   <header class="app-header">
     <div class="header-logo">
@@ -23,6 +43,7 @@
         <span class="subtitle">Plan para subir tu FTP</span>
       </div>
     </div>
+    <button id="btn-logout" class="btn-logout" title="Cerrar sesión">🚪</button>
   </header>
 
   <div id="toast-container" class="toast-container" aria-live="polite"></div>

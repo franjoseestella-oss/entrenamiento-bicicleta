@@ -572,3 +572,53 @@ renderZones();
 bindInputs();
 currentPlan = loadPlan();
 renderPlan(); // muestra el plan guardado (con tus ediciones) o el aviso
+
+/* ---------- autenticación ---------- */
+const AUTH_KEY = 'entrenamiento_bici_auth_v1';
+
+function checkAuth() {
+  const authed = localStorage.getItem(AUTH_KEY) === 'true';
+  const loginScreen = document.getElementById('login-screen');
+  const appScreen = document.getElementById('app');
+  
+  if (authed) {
+    loginScreen.style.display = 'none';
+    appScreen.style.display = 'block';
+  } else {
+    loginScreen.style.display = 'flex';
+    appScreen.style.display = 'none';
+    document.getElementById('login-username').focus();
+  }
+}
+
+document.getElementById('login-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const user = document.getElementById('login-username').value.trim();
+  const pass = document.getElementById('login-password').value;
+  const errDiv = document.getElementById('login-error');
+
+  if (user.toLowerCase() === 'fran' && pass === 'bici') {
+    localStorage.setItem(AUTH_KEY, 'true');
+    errDiv.style.display = 'none';
+    checkAuth();
+    toast('Sesión iniciada ✅');
+  } else {
+    errDiv.style.display = 'block';
+    errDiv.style.animation = 'none';
+    errDiv.offsetHeight; /* trigger reflow */
+    errDiv.style.animation = null;
+  }
+});
+
+document.getElementById('btn-logout').addEventListener('click', () => {
+  localStorage.removeItem(AUTH_KEY);
+  document.getElementById('login-username').value = '';
+  document.getElementById('login-password').value = '';
+  document.getElementById('login-error').style.display = 'none';
+  checkAuth();
+  toast('Sesión cerrada 🚪');
+});
+
+// Comprobar autenticación al arrancar
+checkAuth();
+
