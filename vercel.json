@@ -5,10 +5,5 @@
       "source": "/sw.js",
       "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
     }
-  ],
-  "functions": {
-    "api/upload_garmin.py": {
-      "maxDuration": 60
-    }
-  }
+  ]
 }
