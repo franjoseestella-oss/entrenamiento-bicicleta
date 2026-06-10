@@ -412,13 +412,124 @@ function downloadOne(wi, si) {
   toast('Descargado: ' + fname);
 }
 
-/* Plan completo en un único archivo (con fechas) para subir+agendar con el script */
+/* Plan completo descargable como JSON (fallback manual) */
 document.getElementById('btn-download-plan').addEventListener('click', () => {
   if (!currentPlan) return;
   const data = buildPlanExport(currentPlan);
   downloadJSON(data, 'plan_garmin.json');
-  toast('plan_garmin.json descargado · súbelo con el script');
+  toast('plan_garmin.json descargado');
 });
+
+/* ── Subir directamente a Garmin Connect ── */
+document.getElementById('btn-garmin-upload').addEventListener('click', () => {
+  if (!currentPlan) { toast('Genera un plan primero'); return; }
+  openGarminModal();
+});
+
+function openGarminModal() {
+  const ov = document.getElementById('garmin-overlay');
+  gmShow('gm-form');
+  document.getElementById('gm-email').value    = '';
+  document.getElementById('gm-password').value = '';
+  ov.classList.add('open');
+}
+
+function gmShow(id) {
+  ['gm-form', 'gm-mfa', 'gm-loading', 'gm-result'].forEach((s) => {
+    document.getElementById(s).style.display = s === id ? '' : 'none';
+  });
+}
+
+function closeGarminModal() {
+  document.getElementById('garmin-overlay').classList.remove('open');
+}
+
+document.getElementById('garmin-overlay').addEventListener('click', (e) => {
+  if (e.target.id === 'garmin-overlay') closeGarminModal();
+});
+document.querySelectorAll('#garmin-modal .modal-close').forEach((b) => {
+  b.addEventListener('click', closeGarminModal);
+});
+
+/* Primer envío (email + contraseña) */
+document.getElementById('gm-submit').addEventListener('click', () => {
+  const email    = document.getElementById('gm-email').value.trim();
+  const password = document.getElementById('gm-password').value.trim();
+  if (!email || !password) { toast('Introduce email y contraseña'); return; }
+  garminUpload(email, password, null);
+});
+
+/* Segundo envío con código MFA */
+document.getElementById('gm-mfa-submit').addEventListener('click', () => {
+  const code = document.getElementById('gm-mfa-code').value.trim();
+  if (!code) { toast('Introduce el código de verificación'); return; }
+  const email    = document.getElementById('gm-email').value.trim();
+  const password = document.getElementById('gm-password').value.trim();
+  garminUpload(email, password, code);
+});
+
+async function garminUpload(email, password, mfaCode) {
+  const plan = buildPlanExport(currentPlan);
+  gmShow('gm-loading');
+  document.getElementById('gm-progress-text').textContent =
+    mfaCode ? 'Verificando código…' : 'Conectando con Garmin…';
+
+  let res, data;
+  try {
+    res = await fetch('/api/upload_garmin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+        password,
+        mfa_code: mfaCode || '',
+        workouts: plan.workouts,
+      }),
+    });
+    data = await res.json();
+  } catch (err) {
+    gmShowError(`Error de red: ${err.message}`);
+    return;
+  }
+
+  if (res.status === 202 && data.needs_mfa) {
+    gmShow('gm-mfa');
+    document.getElementById('gm-mfa-code').value = '';
+    document.getElementById('gm-mfa-code').focus();
+    return;
+  }
+  if (!res.ok) {
+    gmShowError(data.error || `Error ${res.status}`);
+    return;
+  }
+
+  // éxito
+  const { uploaded, total, ok, errors } = data;
+  let html = '';
+  if (ok && ok.length) {
+    html += `<div class="gm-result-ok">
+      <h4>✅ ${uploaded} de ${total} subidos y agendados</h4>
+      <ul>${ok.map((x) => `<li>· ${x.name}${x.date ? '  →  ' + x.date : ''}</li>`).join('')}</ul>
+    </div>`;
+  }
+  if (errors && errors.length) {
+    html += `<div class="gm-result-err">
+      <h4>⚠️ ${errors.length} con problemas</h4>
+      <ul>${errors.map((x) => `<li>· ${x.name}: ${x.error}</li>`).join('')}</ul>
+    </div>`;
+  }
+  if (!html) html = '<p class="muted">Sin resultados.</p>';
+
+  document.getElementById('gm-result-content').innerHTML = html;
+  gmShow('gm-result');
+  toast(`${uploaded}/${total} workouts subidos a Garmin ✅`);
+}
+
+function gmShowError(msg) {
+  document.getElementById('gm-result-content').innerHTML =
+    `<div class="gm-error-banner">${msg}</div>`;
+  gmShow('gm-result');
+}
 
 document.getElementById('btn-download-all').addEventListener('click', async () => {
   if (!currentPlan) return;

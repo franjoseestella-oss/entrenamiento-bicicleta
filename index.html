@@ -10,7 +10,7 @@
   <title>Entrenamiento Bici · Plan FTP</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icon.svg" />
-  <link rel="stylesheet" href="css/styles.css?v=3" />
+  <link rel="stylesheet" href="css/styles.css?v=4" />
 </head>
 <body>
 <div id="app">
@@ -95,7 +95,8 @@
     </div>
 
     <div class="plan-actions">
-      <button class="btn-primary" id="btn-download-plan">📦 Plan completo para Garmin (1 archivo)</button>
+      <button class="btn-primary big" id="btn-garmin-upload">🚀 Subir a Garmin Connect</button>
+      <button class="btn-secondary" id="btn-download-plan">📦 Descargar JSON (Garmin)</button>
       <button class="btn-secondary" id="btn-download-all">⬇️ Workouts sueltos (.json)</button>
       <button class="btn-secondary" id="btn-download-schedule">🗓️ Calendario (.csv)</button>
     </div>
@@ -118,11 +119,58 @@
     <div class="modal" id="modal-content"></div>
   </div>
 
+  <!-- ════════ MODAL Garmin Connect ════════ -->
+  <div id="garmin-overlay" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal" id="garmin-modal">
+
+      <!-- estado: formulario credenciales -->
+      <div id="gm-form">
+        <h3>Subir a Garmin Connect</h3>
+        <p class="muted" style="margin-top:6px">Tus credenciales no se guardan en ningún sitio.</p>
+        <label class="field" style="margin-top:18px">
+          <span>Email de Garmin Connect</span>
+          <input type="email" id="gm-email" autocomplete="email" inputmode="email" placeholder="tu@email.com" />
+        </label>
+        <label class="field" style="margin-top:12px">
+          <span>Contraseña</span>
+          <input type="password" id="gm-password" autocomplete="current-password" />
+        </label>
+        <button class="btn-primary big" id="gm-submit" style="margin-top:20px">🚀 Subir plan</button>
+        <button class="btn-secondary modal-close" id="gm-cancel">Cancelar</button>
+      </div>
+
+      <!-- estado: verificación en dos pasos -->
+      <div id="gm-mfa" style="display:none">
+        <h3>Verificación en dos pasos</h3>
+        <p class="muted" style="margin-top:6px">Introduce el código que te ha llegado al móvil o email.</p>
+        <label class="field" style="margin-top:18px">
+          <span>Código de verificación</span>
+          <input type="text" id="gm-mfa-code" inputmode="numeric" maxlength="8"
+                 autocomplete="one-time-code" placeholder="123456" />
+        </label>
+        <button class="btn-primary big" id="gm-mfa-submit" style="margin-top:20px">✅ Confirmar</button>
+      </div>
+
+      <!-- estado: subiendo -->
+      <div id="gm-loading" style="display:none;text-align:center;padding:32px 0">
+        <div class="gm-spinner"></div>
+        <p class="muted" id="gm-progress-text" style="margin-top:16px">Conectando con Garmin…</p>
+      </div>
+
+      <!-- estado: resultado -->
+      <div id="gm-result" style="display:none">
+        <div id="gm-result-content"></div>
+        <button class="btn-primary modal-close" id="gm-done" style="margin-top:20px">Cerrar</button>
+      </div>
+
+    </div>
+  </div>
+
 </div>
 
-<script src="js/planner.js?v=3"></script>
-<script src="js/garmin.js?v=3"></script>
-<script src="js/app.js?v=3"></script>
+<script src="js/planner.js?v=4"></script>
+<script src="js/garmin.js?v=4"></script>
+<script src="js/app.js?v=4"></script>
 <script>
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(() => {});

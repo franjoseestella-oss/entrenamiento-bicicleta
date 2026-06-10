@@ -183,3 +183,31 @@ input:focus, select:focus { border-color: var(--primary); }
 .step-bar { width: 6px; border-radius: 3px; align-self: stretch; min-height: 22px; }
 .step-rep { border-left: 2px dashed var(--primary); padding-left: 10px; margin-left: 6px; }
 .modal-close { width: 100%; margin-top: 16px; }
+
+/* Garmin upload modal */
+.gm-spinner {
+  width: 48px; height: 48px; border-radius: 50%; margin: 0 auto;
+  border: 4px solid var(--border);
+  border-top-color: var(--primary);
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.gm-result-ok {
+  background: rgba(47,158,68,.12); border: 1px solid rgba(47,158,68,.4);
+  border-radius: var(--radius); padding: 14px; margin-bottom: 10px;
+}
+.gm-result-ok h4 { color: var(--green); margin-bottom: 8px; }
+.gm-result-ok ul { list-style: none; font-size: .83rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 3px; }
+
+.gm-result-err {
+  background: rgba(248,81,73,.1); border: 1px solid rgba(248,81,73,.35);
+  border-radius: var(--radius); padding: 14px; margin-top: 10px;
+}
+.gm-result-err h4 { color: #f85149; margin-bottom: 8px; }
+.gm-result-err ul { list-style: none; font-size: .83rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 3px; }
+
+.gm-error-banner {
+  background: rgba(248,81,73,.1); border: 1px solid rgba(248,81,73,.35);
+  border-radius: var(--radius); padding: 14px; color: #f85149; font-size: .88rem; line-height: 1.45;
+}
