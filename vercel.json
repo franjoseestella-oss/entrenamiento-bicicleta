@@ -6,6 +6,7 @@
       "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
     }
   ],
+  "framework": null,
   "buildCommand": null,
   "outputDirectory": "./"
 }
