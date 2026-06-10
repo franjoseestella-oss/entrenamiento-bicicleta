@@ -224,7 +224,22 @@ input:focus, select:focus { border-color: var(--primary); }
   width: 100%; max-width: 400px; text-align: center;
   animation: fade .3s ease-out;
 }
-.login-logo { font-size: 3rem; margin-bottom: 16px; }
+.login-bike-container {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 12px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+}
+.login-bike-img {
+  max-width: 100%;
+  height: auto;
+  max-height: 180px;
+  object-fit: contain;
+}
 .login-card h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 6px; }
 .login-card form { margin-top: 24px; text-align: left; display: flex; flex-direction: column; gap: 16px; }
 .login-error-message {
