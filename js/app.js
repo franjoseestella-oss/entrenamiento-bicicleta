@@ -597,7 +597,17 @@ document.getElementById('login-form').addEventListener('submit', (e) => {
   const pass = document.getElementById('login-password').value;
   const errDiv = document.getElementById('login-error');
 
-  if (user.toLowerCase() === 'fran' && pass === 'bici') {
+  const userB64 = btoa(user.toLowerCase());
+  const passB64 = btoa(pass);
+
+  const validUsers = [
+    'ZnJhbixqb3NlLmV0ZWxsYUBnbWFpbC5jb20=', // fran,jose.etella@gmail.com
+    'ZnJhbi5qb3NlLmVzdGVsbGFAZ21haWwuY29t', // fran.jose.estella@gmail.com
+    'ZnJhbi5qb3NlLmV0ZWxsYUBnbWFpbC5jb20=', // fran.jose.etella@gmail.com
+    'ZnJhbmpvc2UuZXN0ZWxsYUBnbWFpbC5jb20='  // franjose.estella@gmail.com
+  ];
+
+  if (validUsers.includes(userB64) && passB64 === 'VGFsZWdvMTk4NQ==') {
     localStorage.setItem(AUTH_KEY, 'true');
     errDiv.style.display = 'none';
     checkAuth();
